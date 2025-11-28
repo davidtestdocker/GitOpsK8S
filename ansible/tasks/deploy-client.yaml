@@ -1,0 +1,48 @@
+- name: Deploy client deployment
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: client-deployment
+        namespace: multi-app
+        labels:
+          component: web
+      spec:
+        replicas: 3
+        selector:
+          matchLabels:
+            component: web
+        template:
+          metadata:
+            labels:
+              component: web
+          spec:
+            containers:
+              - name: client
+                image: "{{ region }}-docker.pkg.dev/{{ project_id }}/{{ artifact_repo }}/multi-client:{{ image_tag }}"
+                resources:
+                  requests:
+                    cpu: "50m"
+                    memory: "128Mi"
+                ports:
+                  - containerPort: 3000
+
+- name: Deploy client service
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: client-clusterip-service
+        namespace: multi-app
+      spec:
+        type: ClusterIP
+        selector:
+          component: web
+        ports:
+          - port: 3000
+            targetPort: 3000
+

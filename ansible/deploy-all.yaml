@@ -1,0 +1,73 @@
+---
+- name: Deploy full multi-service stack to GKE
+  hosts: localhost
+  gather_facts: false
+
+  environment:
+    KUBECONFIG: "/home/runner/.kube/config"
+
+  vars:
+    ns: "multi-app"
+    region: "{{ lookup('env','REGION') }}"
+    project_id: "{{ lookup('env','PROJECT_ID') }}"
+    artifact_repo: "{{ lookup('env','ARTIFACT_REPO') }}"
+    image_tag: "{{ lookup('env','IMAGE_TAG') }}"
+    pg_password: "{{ lookup('env','PG_PASSWORD') }}"
+
+  tasks:
+
+    # --------------------------
+    # Debug kubeconfig
+    # --------------------------
+    - name: Debug kubeconfig inside Ansible
+      shell: cat /home/runner/.kube/config
+      changed_when: false
+
+    # --------------------------
+    # Namespace
+    # --------------------------
+    - name: Ensure namespace exists
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ ns }}"
+            labels:
+              autopilot.gke.io/resource-manager: "true"
+     
+    - import_tasks: tasks/deploy-secretpg.yaml       
+
+    # --------------------------
+    # Deploy PVC
+    # --------------------------
+    - import_tasks: tasks/deploy-pvc.yaml
+
+    # --------------------------
+    # Deploy PostgreSQL
+    # --------------------------
+    - import_tasks: tasks/deploy-postgres.yaml
+
+    # --------------------------
+    # Deploy Redis
+    # --------------------------
+    - import_tasks: tasks/deploy-redis.yaml
+
+    # --------------------------
+    # Deploy Server
+    # --------------------------
+    - import_tasks: tasks/deploy-server.yaml
+
+    # --------------------------
+    # Deploy Worker
+    # --------------------------
+    - import_tasks: tasks/deploy-worker.yaml
+
+    # --------------------------
+    # Deploy Client
+    # --------------------------
+    - import_tasks: tasks/deploy-client.yaml
+
+    - import_tasks: tasks/deploy-ingress.yaml
+
