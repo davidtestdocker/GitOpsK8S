@@ -86,24 +86,3 @@ jobs:
           docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/multi-worker:${{ env.IMAGE_TAG }} ./worker
           docker push    ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/multi-worker:${{ env.IMAGE_TAG }}
 
-      # 5. Install Ansible & K8s modules
-      - name: Install Ansible + K8s libs
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install ansible kubernetes openshift pyyaml
-          ansible-galaxy collection install kubernetes.core
-
-      # 6. Run Ansible deployment（透過 KUBECONFIG）
-      - name: Run Ansible Deploy
-        working-directory: ./ansible
-        env:
-          PROJECT_ID: ${{ env.PROJECT_ID }}
-          REGION: ${{ env.REGION }}
-          CLUSTER_NAME: ${{ env.CLUSTER_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
-          ARTIFACT_REPO: ${{ env.ARTIFACT_REPO }}
-          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          KUBECONFIG: $HOME/.kube/config
-        run: |
-          ansible-playbook -i inventory deploy-all.yaml
-
