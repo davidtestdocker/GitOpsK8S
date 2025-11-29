@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: asia-east1-docker.pkg.dev/k8stest-478013/multik8s-repo/multi-server:latest
+          image: asia-east1-docker.pkg.dev/k8stest-478013/multik8s2-repo/multi-server:latest
           resources:
             requests:
               cpu: "100m"

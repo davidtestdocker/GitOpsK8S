@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: asia-east1-docker.pkg.dev/k8stest-478013/multik8s-repo/multi-client:latest
+          image: asia-east1-docker.pkg.dev/k8stest-478013/multik8s2-repo/multi-client:latest
           resources:
             requests:
               cpu: "50m"
