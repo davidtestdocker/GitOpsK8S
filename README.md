@@ -1,4 +1,4 @@
-<h2>Cloud-Native 微服務架構：Terraform + GKE + Ansible + GitHub Actions</h2>
+<h2>Cloud-Native 微服務架構：Terraform + GKE + Argo CD + GitHub Actions</h2>
 <h3>本專案以 IaC（Infrastructure as Code） 與 Kubernetes 為核心，組成一個能自動化建置、部署、擴展的現代化微服務平台</h3>
 
 <strong>1. 基礎建設層（Infrastructure Layer）— Terraform + Google Cloud</strong>
@@ -25,8 +25,6 @@
 <li>Auth：使用 GCP SA（Service Account）登入 Google Cloud</li>
 <li>push/pull image 到 Artifact Registry</li>
 <li>取得 github 上的 secret variables</li>
-<li>Generate Kubeconfig：透過 gcloud 自動取得 GKE 憑證</li>
-<li>Deploy：執行 Ansible Playbook 中的任務</li>
 </ul>
 <a href=".github/workflows/deploy.yaml">GitHub Actions配置檔</a>
 <hr>
@@ -71,23 +69,21 @@
 <br>
 <a href="worker">worker Dockerfile</a>
 <hr>
-<strong>4. Kubernetes 物件（Deployment / Service / Ingress / PVC）統一由 Ansible 管理</strong>
-<p>Terraform 建置 cluster，但 Kubernetes 物件（Deployment / Service / Ingress / PVC）統一由 Ansible 管理</p>
-<p>Ansible 在 CI/CD pipeline 中負責</p>
+<strong>4. Kubernetes 物件（Deployment / Service / Ingress / PVC）統一由 Argo CD 管理配置</strong>
+<p>Terraform 建置 cluster，但 Kubernetes 物件（Deployment / Service / Ingress / PVC）統一由 Argo CD 管理配置</p>
+<p>Argo CD 在 CD pipeline 中負責</p>
 <ul>
-   <li> 建立Namespace</li>
+   <li>建立Namespace</li>
    <li>建立 Secrets（如 PG 密碼</li>
    <li>部署 Postgres + PVC</li>
    <li>部署 Redis</li>
    <li>部署 Server / Worker / Client</li>
    <li>建立 Nginx Ingress</li>
-   <li>滾動更新 Deployment 到最新 image</li>
 </ul>
-<a href="ansible/deploy-all.yaml">Ansible配置檔(all)</a>
-<br>
-<a href="ansible/tasks">Ansible配置檔(independent task)</a>
+<a href="k8s">Argo CD 配置檔(independent task)</a>
 <hr>
-<strong>部署完驗證</strong>
-<p>kubectl get deployment -n  multi-app</p>
-<p>看部屬服務狀況</p>
+<strong>cloud shell 安裝 Argo CD 、 HELM</strong>
+<p>確保下載成功</p>
+<p>kubectl get pods -n argocd</p>
+<p>配置 argocd-ingress.yaml</p>
 <img src=""></img>
