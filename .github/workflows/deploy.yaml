@@ -30,44 +30,6 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           export_default_credentials: true
 
-      # 2. Kubeconfig
-      - name: Generate kubeconfig manually
-        run: |
-          mkdir -p $HOME/.kube
-
-          ACCESS_TOKEN=$(gcloud auth print-access-token)
-          ENDPOINT=$(gcloud container clusters describe ${{ env.CLUSTER_NAME }} \
-            --region ${{ env.REGION }} --format='value(endpoint)')
-          CA_CERT=$(gcloud container clusters describe ${{ env.CLUSTER_NAME }} \
-            --region ${{ env.REGION }} --format='value(masterAuth.clusterCaCertificate)')
-          cat > $HOME/.kube/config <<EOF
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: gke
-            cluster:
-              certificate-authority-data: ${CA_CERT}
-              server: https://${ENDPOINT}
-          users:
-          - name: gke-user
-            user:
-              token: ${ACCESS_TOKEN}
-          contexts:
-          - name: gke-context
-            context:
-              cluster: gke
-              user: gke-user
-          current-context: gke-context
-          EOF
-
-      - name: Show kubeconfig raw file
-        run: |
-          echo "==============="
-          echo "KUBECONFIG RAW"
-          echo "==============="
-          cat $HOME/.kube/config || echo "(FILE NOT FOUND)"
-          echo "---------------"
-
 
       # 3. Docker auth for Artifact Registry
       - name: Configure Docker auth
