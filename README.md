@@ -86,4 +86,13 @@
 <p>確保下載成功</p>
 <p>kubectl get pods -n argocd</p>
 <p>配置 argocd-ingress.yaml</p>
-<img src=""></img>
+<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
+<p>可以部署了</p>
+<p>kubectl apply -f argocd-ingress.yaml</p>
+<p>驗證</p>
+<p>kubectl get ingress -n argocd</p>
+<p>kubectl get service -n ingress-nginx</p>
+<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
+<p>部屬成功</p>
+<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
+<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
