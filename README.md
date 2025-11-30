@@ -92,7 +92,7 @@
 <p>驗證</p>
 <p>kubectl get ingress -n argocd</p>
 <p>kubectl get service -n ingress-nginx</p>
-<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
+<img src="img/螢幕擷取畫面 2025-11-30 202908.png"></img>
 <p>部屬成功</p>
-<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
-<img src="img/螢幕擷取畫面 2025-11-30 194542.png"></img>
+<img src="img/螢幕擷取畫面 2025-11-30 194807.png"></img>
+<img src="img/螢幕擷取畫面 2025-11-30 194910.png"></img>
